@@ -1,0 +1,1352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>100 Days to ML Senior Brain</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --border: #1e1e2e;
+    --accent: #00ff88;
+    --accent2: #ff6b35;
+    --accent3: #7b61ff;
+    --text: #e8e8f0;
+    --muted: #666680;
+    --phase1: #00ff88;
+    --phase2: #7b61ff;
+    --phase3: #ff6b35;
+    --phase4: #00c9ff;
+    --phase5: #ff61ab;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,255,136,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,255,136,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 60px;
+    animation: fadeDown 0.8s ease both;
+  }
+
+  .header-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(36px, 6vw, 72px);
+    font-weight: 800;
+    line-height: 1;
+    background: linear-gradient(135deg, #fff 0%, var(--accent) 50%, var(--accent3) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 16px;
+  }
+
+  .subtitle {
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.8;
+  }
+
+  /* Stats bar */
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 48px;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+
+  .stat {
+    background: var(--surface);
+    padding: 20px;
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--accent);
+    display: block;
+  }
+
+  .stat-label {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 4px;
+    display: block;
+  }
+
+  /* Phase legend */
+  .legend {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 48px;
+    animation: fadeUp 0.8s 0.3s ease both;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  .legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* Phase section */
+  .phase {
+    margin-bottom: 48px;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .phase-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .phase-number {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  .phase-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+  }
+
+  .phase-days {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    margin-left: auto;
+    white-space: nowrap;
+  }
+
+  /* Day grid */
+  .days-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 12px;
+  }
+
+  .day-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    transition: border-color 0.2s, transform 0.2s;
+    cursor: default;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .day-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    border-radius: 10px 0 0 10px;
+  }
+
+  .day-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--border);
+  }
+
+  .day-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    min-width: 36px;
+    padding-top: 2px;
+    opacity: 0.5;
+  }
+
+  .day-content {}
+
+  .day-topic {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.4;
+    margin-bottom: 4px;
+  }
+
+  .day-sub {
+    font-size: 10px;
+    color: var(--muted);
+    line-height: 1.6;
+    letter-spacing: 0.5px;
+  }
+
+  .badge {
+    display: inline-block;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 3px;
+    margin-bottom: 6px;
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* Phase color themes */
+  .p1 { --pc: var(--phase1); }
+  .p2 { --pc: var(--phase2); }
+  .p3 { --pc: var(--phase3); }
+  .p4 { --pc: var(--phase4); }
+  .p5 { --pc: var(--phase5); }
+
+  .phase-number { background: rgba(var(--pc-rgb), 0.15); color: var(--pc); }
+
+  .p1 .phase-number { background: rgba(0,255,136,0.1); color: var(--phase1); }
+  .p2 .phase-number { background: rgba(123,97,255,0.1); color: var(--phase2); }
+  .p3 .phase-number { background: rgba(255,107,53,0.1); color: var(--phase3); }
+  .p4 .phase-number { background: rgba(0,201,255,0.1); color: var(--phase4); }
+  .p5 .phase-number { background: rgba(255,97,171,0.1); color: var(--phase5); }
+
+  .p1 .phase-title { color: var(--phase1); }
+  .p2 .phase-title { color: var(--phase2); }
+  .p3 .phase-title { color: var(--phase3); }
+  .p4 .phase-title { color: var(--phase4); }
+  .p5 .phase-title { color: var(--phase5); }
+
+  .p1 .day-card::before { background: var(--phase1); }
+  .p2 .day-card::before { background: var(--phase2); }
+  .p3 .day-card::before { background: var(--phase3); }
+  .p4 .day-card::before { background: var(--phase4); }
+  .p5 .day-card::before { background: var(--phase5); }
+
+  .p1 .day-card:hover { border-color: rgba(0,255,136,0.3); box-shadow: 0 4px 20px rgba(0,255,136,0.08); }
+  .p2 .day-card:hover { border-color: rgba(123,97,255,0.3); box-shadow: 0 4px 20px rgba(123,97,255,0.08); }
+  .p3 .day-card:hover { border-color: rgba(255,107,53,0.3); box-shadow: 0 4px 20px rgba(255,107,53,0.08); }
+  .p4 .day-card:hover { border-color: rgba(0,201,255,0.3); box-shadow: 0 4px 20px rgba(0,201,255,0.08); }
+  .p5 .day-card:hover { border-color: rgba(255,97,171,0.3); box-shadow: 0 4px 20px rgba(255,97,171,0.08); }
+
+  .p1 .badge { background: rgba(0,255,136,0.1); color: var(--phase1); }
+  .p2 .badge { background: rgba(123,97,255,0.1); color: var(--phase2); }
+  .p3 .badge { background: rgba(255,107,53,0.1); color: var(--phase3); }
+  .p4 .badge { background: rgba(0,201,255,0.1); color: var(--phase4); }
+  .p5 .badge { background: rgba(255,97,171,0.1); color: var(--phase5); }
+
+  .p1 .day-num { color: var(--phase1); }
+  .p2 .day-num { color: var(--phase2); }
+  .p3 .day-num { color: var(--phase3); }
+  .p4 .day-num { color: var(--phase4); }
+  .p5 .day-num { color: var(--phase5); }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 48px 0 24px;
+    border-top: 1px solid var(--border);
+    margin-top: 48px;
+  }
+
+  .footer-text {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .footer-accent {
+    color: var(--accent);
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    display: block;
+    margin-top: 8px;
+  }
+
+  /* Keyframes */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .phase:nth-child(1) { animation-delay: 0.1s; }
+  .phase:nth-child(2) { animation-delay: 0.2s; }
+  .phase:nth-child(3) { animation-delay: 0.3s; }
+  .phase:nth-child(4) { animation-delay: 0.4s; }
+  .phase:nth-child(5) { animation-delay: 0.5s; }
+
+  @media (max-width: 600px) {
+    .stats-bar { grid-template-columns: repeat(2, 1fr); }
+    .days-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <span class="header-tag">// EE → ML Senior Engineer</span>
+    <h1>100-DAY<br>ML BRAIN</h1>
+    <p class="subtitle">Junior to Senior. Day by day. Built for someone who thinks in signals and math — not CS theory.</p>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat"><span class="stat-num">100</span><span class="stat-label">Days</span></div>
+    <div class="stat"><span class="stat-num">5</span><span class="stat-label">Phases</span></div>
+    <div class="stat"><span class="stat-num">∞</span><span class="stat-label">Depth</span></div>
+    <div class="stat"><span class="stat-num">1</span><span class="stat-label">You</span></div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:var(--phase1)"></div> Phase 1 · Math & Thinking Like a Senior</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--phase2)"></div> Phase 2 · Core ML, Done Deeply</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--phase3)"></div> Phase 3 · The Hard Stuff Juniors Skip</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--phase4)"></div> Phase 4 · Production ML & Systems Thinking</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--phase5)"></div> Phase 5 · Research-Level Intuition</div>
+  </div>
+
+  <!-- PHASE 1 -->
+  <div class="phase p1">
+    <div class="phase-header">
+      <span class="phase-number">Phase 01</span>
+      <span class="phase-title">Math & Thinking Like a Senior</span>
+      <span class="phase-days">Days 1–20</span>
+    </div>
+    <div class="days-grid">
+
+      <div class="day-card">
+        <span class="day-num">D01</span>
+        <div class="day-content">
+          <span class="badge">Mindset</span>
+          <div class="day-topic">Junior vs Senior ML Engineer</div>
+          <div class="day-sub">What seniors actually do differently. Thinking in distributions, not data points. The 3 questions seniors ask first.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D02</span>
+        <div class="day-content">
+          <span class="badge">Math</span>
+          <div class="day-topic">Vectors & Matrices — the ML way</div>
+          <div class="day-sub">Stop thinking rows/columns. Start thinking transformations. Why your EE background makes this easier.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D03</span>
+        <div class="day-content">
+          <span class="badge">Math</span>
+          <div class="day-topic">Eigenvalues — why they're everywhere</div>
+          <div class="day-sub">PCA, covariance, stability. The same thing you saw in control systems, now in data.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D04</span>
+        <div class="day-content">
+          <span class="badge">Math</span>
+          <div class="day-topic">Gradients & the Chain Rule (visually)</div>
+          <div class="day-sub">Not symbolic calculus — geometric intuition. Why backprop is just repeated chain rule with bookkeeping.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D05</span>
+        <div class="day-content">
+          <span class="badge">Math</span>
+          <div class="day-topic">Probability Distributions — deep read</div>
+          <div class="day-sub">Gaussian, Bernoulli, Poisson, Laplace. When to use which. Why this matters more than any algorithm.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D06</span>
+        <div class="day-content">
+          <span class="badge">Math</span>
+          <div class="day-topic">Bayes Theorem — beyond the formula</div>
+          <div class="day-sub">Prior, likelihood, posterior. How Bayesian thinking is a superpower for senior engineers.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D07</span>
+        <div class="day-content">
+          <span class="badge">Math</span>
+          <div class="day-topic">Information Theory: Entropy & KL Divergence</div>
+          <div class="day-sub">What loss functions really measure. Why cross-entropy is everywhere. Shannon to ML pipeline.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D08</span>
+        <div class="day-content">
+          <span class="badge">Math</span>
+          <div class="day-topic">Convexity & Optimization Landscape</div>
+          <div class="day-sub">Why some problems are easy, others aren't. Local vs global minima. Saddle points. What seniors know about loss surfaces.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D09</span>
+        <div class="day-content">
+          <span class="badge">Code</span>
+          <div class="day-topic">NumPy like a Senior</div>
+          <div class="day-sub">Vectorized thinking. Broadcasting rules. Memory layout. Why juniors write slow loops seniors never would.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D10</span>
+        <div class="day-content">
+          <span class="badge">Code</span>
+          <div class="day-topic">Pandas Anti-Patterns & Best Practices</div>
+          <div class="day-sub">Chained indexing, .apply() abuse, SettingWithCopyWarning. Patterns seniors avoid and why.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D11</span>
+        <div class="day-content">
+          <span class="badge">Thinking</span>
+          <div class="day-topic">Statistical Significance & p-values (right way)</div>
+          <div class="day-sub">Why juniors misuse p-values. Effect size, power, multiple testing. What to actually report.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D12</span>
+        <div class="day-content">
+          <span class="badge">Thinking</span>
+          <div class="day-topic">Bias-Variance Tradeoff — deeply</div>
+          <div class="day-sub">Not just the definition. Why it drives every architecture decision. Senior intuition for diagnosing models.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D13</span>
+        <div class="day-content">
+          <span class="badge">Math</span>
+          <div class="day-topic">The Curse of Dimensionality</div>
+          <div class="day-sub">Why high-dim data breaks intuition. Volume of hyperspheres. Implications for distance-based methods.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D14</span>
+        <div class="day-content">
+          <span class="badge">Thinking</span>
+          <div class="day-topic">Framing the Right Problem</div>
+          <div class="day-sub">The biggest senior skill: turning vague business questions into precise ML problems. Worked examples.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D15</span>
+        <div class="day-content">
+          <span class="badge">Math</span>
+          <div class="day-topic">SVD — the backbone of modern ML</div>
+          <div class="day-sub">Singular Value Decomposition from scratch. PCA as SVD. Latent factors. Compression. Why it's everywhere.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D16</span>
+        <div class="day-content">
+          <span class="badge">Code</span>
+          <div class="day-topic">Python Profiling & Performance</div>
+          <div class="day-sub">cProfile, line_profiler, memory_profiler. Where bottlenecks really are. How seniors find them in 5 min.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D17</span>
+        <div class="day-content">
+          <span class="badge">Thinking</span>
+          <div class="day-topic">Metric Design — what juniors get wrong</div>
+          <div class="day-sub">Goodhart's Law. Proxy vs true metrics. How bad metrics kill ML projects before they start.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D18</span>
+        <div class="day-content">
+          <span class="badge">Math</span>
+          <div class="day-topic">Regularization — mathematical roots</div>
+          <div class="day-sub">L1 vs L2, Bayesian interpretation. Why sparsity comes from L1. Elastic net. Not just "add lambda".</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D19</span>
+        <div class="day-content">
+          <span class="badge">Thinking</span>
+          <div class="day-topic">Data Leakage — the #1 silent killer</div>
+          <div class="day-sub">How it happens, how to detect it, how to prevent it. Real examples where leakage fooled teams for months.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D20</span>
+        <div class="day-content">
+          <span class="badge">Review</span>
+          <div class="day-topic">Week 3-4 Review + Mental Model Audit</div>
+          <div class="day-sub">What's clicked, what hasn't. Build your personal reference sheet. Set targets for Phase 2.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PHASE 2 -->
+  <div class="phase p2">
+    <div class="phase-header">
+      <span class="phase-number">Phase 02</span>
+      <span class="phase-title">Core ML, Done Deeply</span>
+      <span class="phase-days">Days 21–45</span>
+    </div>
+    <div class="days-grid">
+
+      <div class="day-card">
+        <span class="day-num">D21</span>
+        <div class="day-content">
+          <span class="badge">Algo</span>
+          <div class="day-topic">Linear Regression — the senior version</div>
+          <div class="day-sub">OLS derivation, closed-form vs GD, assumptions, residual diagnostics. Not sklearn.fit().</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D22</span>
+        <div class="day-content">
+          <span class="badge">Algo</span>
+          <div class="day-topic">Logistic Regression — full picture</div>
+          <div class="day-sub">Log-odds, MLE derivation, class imbalance, calibration. Why it's still used in production over NNs.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D23</span>
+        <div class="day-content">
+          <span class="badge">Algo</span>
+          <div class="day-topic">Decision Trees — how they really split</div>
+          <div class="day-sub">Gini vs entropy, information gain, pruning strategies, CART algorithm from scratch.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D24</span>
+        <div class="day-content">
+          <span class="badge">Algo</span>
+          <div class="day-topic">Random Forests — why ensembles win</div>
+          <div class="day-sub">Bagging, feature randomness, OOB error, feature importance (and why it can lie).</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D25</span>
+        <div class="day-content">
+          <span class="badge">Algo</span>
+          <div class="day-topic">Gradient Boosting — inside XGBoost</div>
+          <div class="day-sub">Boosting vs bagging. Additive modeling. Newton boosting. Why XGBoost dominated Kaggle for years.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D26</span>
+        <div class="day-content">
+          <span class="badge">Algo</span>
+          <div class="day-topic">SVMs — the elegant geometry</div>
+          <div class="day-sub">Maximal margin, support vectors, kernel trick. When SVMs still beat NNs. The math your EE brain will love.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D27</span>
+        <div class="day-content">
+          <span class="badge">Unsupervised</span>
+          <div class="day-topic">K-Means — assumptions and failure modes</div>
+          <div class="day-sub">Lloyd's algorithm, initialization (k-means++), choosing k, when k-means silently fails.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D28</span>
+        <div class="day-content">
+          <span class="badge">Unsupervised</span>
+          <div class="day-topic">DBSCAN & Hierarchical Clustering</div>
+          <div class="day-sub">Density-based clustering, dendrograms, linkage methods. When to use what — and why.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D29</span>
+        <div class="day-content">
+          <span class="badge">Unsupervised</span>
+          <div class="day-topic">PCA — projections with purpose</div>
+          <div class="day-sub">Maximizing variance, explained variance ratio, when PCA hurts. Connection to SVD from Day 15.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D30</span>
+        <div class="day-content">
+          <span class="badge">Unsupervised</span>
+          <div class="day-topic">t-SNE & UMAP — visualization that lies</div>
+          <div class="day-sub">What t-SNE preserves, what it doesn't. Perplexity effect. UMAP strengths. How to not be fooled by pretty plots.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D31</span>
+        <div class="day-content">
+          <span class="badge">Deep</span>
+          <div class="day-topic">Neural Networks — backprop from scratch</div>
+          <div class="day-sub">Implement a 2-layer net in NumPy. Forward, backward, update. No PyTorch. This is the foundation.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D32</span>
+        <div class="day-content">
+          <span class="badge">Deep</span>
+          <div class="day-topic">Activation Functions — why each exists</div>
+          <div class="day-sub">Sigmoid dying, ReLU dead neurons, GELU, Swish. The intuition behind each choice.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D33</span>
+        <div class="day-content">
+          <span class="badge">Deep</span>
+          <div class="day-topic">Optimizers — SGD to AdamW</div>
+          <div class="day-sub">Momentum, RMSProp, Adam, AdamW. Weight decay vs L2. When to use which optimizer and why.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D34</span>
+        <div class="day-content">
+          <span class="badge">Deep</span>
+          <div class="day-topic">Learning Rate Scheduling</div>
+          <div class="day-sub">Warmup, cosine annealing, cyclical LR. Why LR is the most important hyperparameter. LR finders.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D35</span>
+        <div class="day-content">
+          <span class="badge">Deep</span>
+          <div class="day-topic">Batch Normalization — how and why</div>
+          <div class="day-sub">Internal covariate shift, running statistics, the train/eval difference, Layer Norm vs Batch Norm.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D36</span>
+        <div class="day-content">
+          <span class="badge">Deep</span>
+          <div class="day-topic">Dropout & Regularization in NNs</div>
+          <div class="day-sub">Dropout as Bayesian approximation. When it helps, when it hurts. MC Dropout for uncertainty.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D37</span>
+        <div class="day-content">
+          <span class="badge">CV</span>
+          <div class="day-topic">CNNs — receptive fields and hierarchies</div>
+          <div class="day-sub">Convolution as signal processing (your EE lens). Pooling, stride, padding. Feature map visualization.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D38</span>
+        <div class="day-content">
+          <span class="badge">CV</span>
+          <div class="day-topic">ResNets & Skip Connections</div>
+          <div class="day-sub">Why depth was broken before residuals. Gradient flow through skip connections. The math of why it works.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D39</span>
+        <div class="day-content">
+          <span class="badge">NLP</span>
+          <div class="day-topic">Embeddings — word2vec to modern</div>
+          <div class="day-sub">Skip-gram, CBOW, GloVe. Why word2vec works (PMI connection). Semantic arithmetic. Embeddings as compression.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D40</span>
+        <div class="day-content">
+          <span class="badge">NLP</span>
+          <div class="day-topic">RNNs, LSTMs & the vanishing gradient</div>
+          <div class="day-sub">Why vanilla RNNs fail, how LSTMs fix it, GRU, BPTT. The signal processing interpretation.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D41</span>
+        <div class="day-content">
+          <span class="badge">Attention</span>
+          <div class="day-topic">Attention Mechanism — from scratch</div>
+          <div class="day-sub">Query, Key, Value. Scaled dot-product. Why attention solved what RNNs couldn't.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D42</span>
+        <div class="day-content">
+          <span class="badge">Attention</span>
+          <div class="day-topic">Transformers — architecture deep dive</div>
+          <div class="day-sub">Multi-head attention, positional encoding, FFN layers. Build a tiny transformer in PyTorch.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D43</span>
+        <div class="day-content">
+          <span class="badge">Eval</span>
+          <div class="day-topic">Evaluation Metrics — the full picture</div>
+          <div class="day-sub">Precision, recall, F1, AUC-ROC, AP, NDCG. When each metric is the right one. The trap of accuracy.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D44</span>
+        <div class="day-content">
+          <span class="badge">Eval</span>
+          <div class="day-topic">Cross-Validation — done right</div>
+          <div class="day-sub">Stratified, GroupKFold, TimeSeriesSplit. Nested CV. Why standard CV leaks with time series.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D45</span>
+        <div class="day-content">
+          <span class="badge">Review</span>
+          <div class="day-topic">Phase 2 Integration — algorithm map</div>
+          <div class="day-sub">Build a decision tree for "which algorithm to use when". Senior judgment, not junior memorization.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PHASE 3 -->
+  <div class="phase p3">
+    <div class="phase-header">
+      <span class="phase-number">Phase 03</span>
+      <span class="phase-title">The Hard Stuff Juniors Skip</span>
+      <span class="phase-days">Days 46–65</span>
+    </div>
+    <div class="days-grid">
+
+      <div class="day-card">
+        <span class="day-num">D46</span>
+        <div class="day-content">
+          <span class="badge">Data</span>
+          <div class="day-topic">Feature Engineering — the senior art</div>
+          <div class="day-sub">Domain-driven features, interactions, target encoding safely, temporal features. Where 80% of gains live.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D47</span>
+        <div class="day-content">
+          <span class="badge">Data</span>
+          <div class="day-topic">Handling Missing Data — beyond imputation</div>
+          <div class="day-sub">MCAR/MAR/MNAR. When mean imputation is criminal. Multiple imputation, missingness as signal.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D48</span>
+        <div class="day-content">
+          <span class="badge">Data</span>
+          <div class="day-topic">Class Imbalance — real solutions</div>
+          <div class="day-sub">SMOTE pitfalls, cost-sensitive learning, threshold tuning, resampling strategies. What actually works.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D49</span>
+        <div class="day-content">
+          <span class="badge">Data</span>
+          <div class="day-topic">Outlier Detection & Treatment</div>
+          <div class="day-sub">IQR, Z-score, Isolation Forest, LOF. The difference between error and rare signal.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D50</span>
+        <div class="day-content">
+          <span class="badge">Tuning</span>
+          <div class="day-topic">Hyperparameter Optimization — Bayesian</div>
+          <div class="day-sub">Grid vs random vs Bayesian search. Optuna, acquisition functions. Early stopping. Efficient search.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D51</span>
+        <div class="day-content">
+          <span class="badge">Ensemble</span>
+          <div class="day-topic">Stacking & Blending</div>
+          <div class="day-sub">Meta-learning. Out-of-fold predictions. When stacking works vs hurts. Kaggle grandmaster trick.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D52</span>
+        <div class="day-content">
+          <span class="badge">Interpret</span>
+          <div class="day-topic">SHAP Values — model interpretability</div>
+          <div class="day-sub">Shapley from game theory. TreeSHAP, KernelSHAP. Interaction effects. What seniors use instead of feature importance.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D53</span>
+        <div class="day-content">
+          <span class="badge">Interpret</span>
+          <div class="day-topic">LIME & Partial Dependence Plots</div>
+          <div class="day-sub">Local vs global explanations. PDP vs ICE. ALE plots. When each explanation type is needed.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D54</span>
+        <div class="day-content">
+          <span class="badge">Time</span>
+          <div class="day-topic">Time Series — beyond naive forecasting</div>
+          <div class="day-sub">Stationarity, ACF/PACF (your EE signal background pays off), decomposition, ARIMA, Prophet.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D55</span>
+        <div class="day-content">
+          <span class="badge">Time</span>
+          <div class="day-topic">Time Series with NNs</div>
+          <div class="day-sub">N-BEATS, Temporal Fusion Transformer. Walk-forward validation. The mistakes juniors make with time data.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D56</span>
+        <div class="day-content">
+          <span class="badge">Causal</span>
+          <div class="day-topic">Causality — correlation's smarter cousin</div>
+          <div class="day-sub">DAGs, confounders, colliders. Why A/B testing is hard. Intro to do-calculus. The thing juniors never learn.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D57</span>
+        <div class="day-content">
+          <span class="badge">Causal</span>
+          <div class="day-topic">Causal Inference Methods</div>
+          <div class="day-sub">Propensity scores, difference-in-differences, instrumental variables. When you can't run experiments.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D58</span>
+        <div class="day-content">
+          <span class="badge">Graphs</span>
+          <div class="day-topic">Graph Neural Networks — intuition first</div>
+          <div class="day-sub">Message passing, GCN, GraphSAGE, GAT. When your data has relational structure.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D59</span>
+        <div class="day-content">
+          <span class="badge">Bayesian</span>
+          <div class="day-topic">Bayesian Machine Learning</div>
+          <div class="day-sub">Bayesian linear regression, Gaussian Processes, uncertainty quantification. When point estimates aren't enough.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D60</span>
+        <div class="day-content">
+          <span class="badge">Bayesian</span>
+          <div class="day-topic">Variational Inference & MCMC (conceptual)</div>
+          <div class="day-sub">Why sampling is hard in high dimensions. ELBO. Mean-field approx. Conceptual not computational.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D61</span>
+        <div class="day-content">
+          <span class="badge">Generative</span>
+          <div class="day-topic">VAEs — encoding and decoding distributions</div>
+          <div class="day-sub">Reparameterization trick. ELBO loss. Latent space interpolation. Why VAE ≠ autoencoder.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D62</span>
+        <div class="day-content">
+          <span class="badge">Generative</span>
+          <div class="day-topic">GANs — the adversarial game</div>
+          <div class="day-sub">Generator vs discriminator, mode collapse, Wasserstein GAN, training stability tricks.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D63</span>
+        <div class="day-content">
+          <span class="badge">Generative</span>
+          <div class="day-topic">Diffusion Models — the new SOTA</div>
+          <div class="day-sub">Forward/reverse process. Score matching. DDPM, DDIM. Why diffusion beat GANs. Denoising as signal recovery.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D64</span>
+        <div class="day-content">
+          <span class="badge">RL</span>
+          <div class="day-topic">Reinforcement Learning — senior mental model</div>
+          <div class="day-sub">MDP, Bellman equation, Q-learning, policy gradients. Where RL actually works in industry.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D65</span>
+        <div class="day-content">
+          <span class="badge">Review</span>
+          <div class="day-topic">Phase 3 Synthesis — connect the dots</div>
+          <div class="day-sub">Build a map of when each advanced technique applies. The senior flowchart juniors don't have.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PHASE 4 -->
+  <div class="phase p4">
+    <div class="phase-header">
+      <span class="phase-number">Phase 04</span>
+      <span class="phase-title">Production ML & Systems Thinking</span>
+      <span class="phase-days">Days 66–85</span>
+    </div>
+    <div class="days-grid">
+
+      <div class="day-card">
+        <span class="day-num">D66</span>
+        <div class="day-content">
+          <span class="badge">MLOps</span>
+          <div class="day-topic">ML System Design Overview</div>
+          <div class="day-sub">The full ML lifecycle. Where most projects fail. What "production ML" really means vs research ML.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D67</span>
+        <div class="day-content">
+          <span class="badge">MLOps</span>
+          <div class="day-topic">Data Pipelines & Feature Stores</div>
+          <div class="day-sub">Training-serving skew. Feature stores (Feast, Hopsworks). Offline vs online features.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D68</span>
+        <div class="day-content">
+          <span class="badge">MLOps</span>
+          <div class="day-topic">Experiment Tracking & Reproducibility</div>
+          <div class="day-sub">MLflow, W&B, DVC. Why reproducibility is the difference between research and engineering.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D69</span>
+        <div class="day-content">
+          <span class="badge">MLOps</span>
+          <div class="day-topic">Model Versioning & Registry</div>
+          <div class="day-sub">Model artifacts, lineage, staged deployment. How seniors manage 50+ models without losing sanity.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D70</span>
+        <div class="day-content">
+          <span class="badge">Serving</span>
+          <div class="day-topic">Model Serving — REST, gRPC, streaming</div>
+          <div class="day-sub">FastAPI for ML, ONNX runtime, TorchServe, Triton. Latency vs throughput tradeoffs.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D71</span>
+        <div class="day-content">
+          <span class="badge">Serving</span>
+          <div class="day-topic">Batching, Caching & Inference Optimization</div>
+          <div class="day-sub">Dynamic batching, KV caching, quantization (INT8/FP16), model distillation for speed.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D72</span>
+        <div class="day-content">
+          <span class="badge">Monitor</span>
+          <div class="day-topic">Data Drift & Model Drift Detection</div>
+          <div class="day-sub">PSI, KL divergence for monitoring. Concept drift vs data drift. When to retrain.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D73</span>
+        <div class="day-content">
+          <span class="badge">Monitor</span>
+          <div class="day-topic">Production Monitoring & Alerting</div>
+          <div class="day-sub">What to log, what to alert on. Shadow mode, canary deployments. The observability mindset.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D74</span>
+        <div class="day-content">
+          <span class="badge">Scale</span>
+          <div class="day-topic">Distributed Training — data & model parallel</div>
+          <div class="day-sub">DDP, ZeRO stages, tensor parallelism. When you need it. Communication bottlenecks.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D75</span>
+        <div class="day-content">
+          <span class="badge">Scale</span>
+          <div class="day-topic">GPU Memory Optimization</div>
+          <div class="day-sub">Mixed precision, gradient checkpointing, activation offloading. Getting more from less VRAM.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D76</span>
+        <div class="day-content">
+          <span class="badge">LLM</span>
+          <div class="day-topic">Fine-tuning LLMs — full vs LoRA</div>
+          <div class="day-sub">Full fine-tune vs LoRA vs QLoRA vs prefix tuning. When each is appropriate. The PEFT ecosystem.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D77</span>
+        <div class="day-content">
+          <span class="badge">LLM</span>
+          <div class="day-topic">RAG Systems — architecture and failure modes</div>
+          <div class="day-sub">Vector DBs, chunking strategies, retrieval quality, context window management. Senior RAG patterns.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D78</span>
+        <div class="day-content">
+          <span class="badge">LLM</span>
+          <div class="day-topic">Prompt Engineering as Engineering</div>
+          <div class="day-sub">Chain-of-thought, few-shot, structured outputs, evaluation of prompts. The science, not the art.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D79</span>
+        <div class="day-content">
+          <span class="badge">Design</span>
+          <div class="day-topic">ML System Design — practice cases</div>
+          <div class="day-sub">Recommendation system, fraud detection, search ranking. How to think through design end-to-end.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D80</span>
+        <div class="day-content">
+          <span class="badge">Safety</span>
+          <div class="day-topic">ML Fairness, Bias & Ethics</div>
+          <div class="day-sub">Types of bias, disparate impact, fairness metrics, debiasing methods. Not optional for seniors.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D81</span>
+        <div class="day-content">
+          <span class="badge">Safety</span>
+          <div class="day-topic">ML Security & Adversarial Attacks</div>
+          <div class="day-sub">FGSM, model inversion, membership inference, prompt injection. Defending production systems.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D82</span>
+        <div class="day-content">
+          <span class="badge">Cost</span>
+          <div class="day-topic">ML Cost Optimization</div>
+          <div class="day-sub">Compute budgets, spot instances, caching, when to use smaller models. ROI of ML infrastructure.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D83</span>
+        <div class="day-content">
+          <span class="badge">AB</span>
+          <div class="day-topic">A/B Testing for ML Models</div>
+          <div class="day-sub">Interleaving, switchback testing, Bayesian A/B, statistical power. How to ship safely.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D84</span>
+        <div class="day-content">
+          <span class="badge">Infra</span>
+          <div class="day-topic">Docker & Kubernetes for ML</div>
+          <div class="day-sub">Containerizing ML workloads, k8s basics, job queues, autoscaling inference. Just enough DevOps.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D85</span>
+        <div class="day-content">
+          <span class="badge">Review</span>
+          <div class="day-topic">Phase 4 Review — production readiness audit</div>
+          <div class="day-sub">Can you take a model from notebook to production? Build your production ML checklist.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PHASE 5 -->
+  <div class="phase p5">
+    <div class="phase-header">
+      <span class="phase-number">Phase 05</span>
+      <span class="phase-title">Research-Level Intuition</span>
+      <span class="phase-days">Days 86–100</span>
+    </div>
+    <div class="days-grid">
+
+      <div class="day-card">
+        <span class="day-num">D86</span>
+        <div class="day-content">
+          <span class="badge">Papers</span>
+          <div class="day-topic">How to Read ML Papers</div>
+          <div class="day-sub">The senior paper-reading framework. Abstract → experiments → method. Separating claims from evidence.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D87</span>
+        <div class="day-content">
+          <span class="badge">Papers</span>
+          <div class="day-topic">Landmark Papers — "Attention Is All You Need"</div>
+          <div class="day-sub">Deep read + re-implement key parts. Understanding the decisions, not just the architecture.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D88</span>
+        <div class="day-content">
+          <span class="badge">Papers</span>
+          <div class="day-topic">Scaling Laws — what they mean for you</div>
+          <div class="day-sub">Chinchilla, OpenAI scaling laws. Compute-optimal training. What scales and what doesn't.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D89</span>
+        <div class="day-content">
+          <span class="badge">Research</span>
+          <div class="day-topic">Ablation Studies — how to think experimentally</div>
+          <div class="day-sub">Designing clean ablations. Confounders in ML research. How to validate your own ideas rigorously.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D90</span>
+        <div class="day-content">
+          <span class="badge">Frontier</span>
+          <div class="day-topic">Mixture of Experts (MoE)</div>
+          <div class="day-sub">Sparse MoE, routing mechanisms, Mixtral architecture. Why scale with MoE is more efficient.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D91</span>
+        <div class="day-content">
+          <span class="badge">Frontier</span>
+          <div class="day-topic">RLHF & Alignment Techniques</div>
+          <div class="day-sub">PPO for LLMs, reward modeling, DPO, Constitutional AI. The techniques behind modern LLMs.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D92</span>
+        <div class="day-content">
+          <span class="badge">Frontier</span>
+          <div class="day-topic">Multimodal Models</div>
+          <div class="day-sub">CLIP, DALL-E, GPT-4V, Flamingo. How modalities are fused. The architectural choices and why.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D93</span>
+        <div class="day-content">
+          <span class="badge">Frontier</span>
+          <div class="day-topic">State Space Models — Mamba & beyond</div>
+          <div class="day-sub">S4, H3, Mamba. SSMs as efficient alternatives to transformers. Your EE state-space intuition is directly applicable.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D94</span>
+        <div class="day-content">
+          <span class="badge">Meta</span>
+          <div class="day-topic">Meta-Learning & Few-Shot Learning</div>
+          <div class="day-sub">MAML, prototypical networks. Learning to learn. When you have very little data.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D95</span>
+        <div class="day-content">
+          <span class="badge">Self</span>
+          <div class="day-topic">Self-Supervised Learning</div>
+          <div class="day-sub">Contrastive learning (SimCLR, MoCo), BYOL, masked autoencoders (MAE). Learning without labels.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D96</span>
+        <div class="day-content">
+          <span class="badge">Neuro</span>
+          <div class="day-topic">Neural Architecture Search (NAS)</div>
+          <div class="day-sub">Differentiable NAS, evolutionary search, EfficientNet. Do you need NAS or is it overkill?</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D97</span>
+        <div class="day-content">
+          <span class="badge">Soft</span>
+          <div class="day-topic">Technical Communication for Senior MLE</div>
+          <div class="day-sub">How to present models to non-ML stakeholders. Writing design docs. Influencing without authority.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D98</span>
+        <div class="day-content">
+          <span class="badge">Soft</span>
+          <div class="day-topic">Code Review & ML Mentorship</div>
+          <div class="day-sub">What seniors look for in ML code reviews. How to give feedback that actually improves code.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D99</span>
+        <div class="day-content">
+          <span class="badge">Audit</span>
+          <div class="day-topic">Full Knowledge Audit</div>
+          <div class="day-sub">Structured self-assessment across all 5 phases. Where are the gaps? What's solidified? Build your growth plan.</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <span class="day-num">D100</span>
+        <div class="day-content">
+          <span class="badge">🎯 Final</span>
+          <div class="day-topic">The Senior ML Mind — what's different now</div>
+          <div class="day-sub">Systems thinking, uncertainty quantification, first-principles reasoning. You don't just run models. You understand them.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-text">100 days. One direction.</div>
+    <span class="footer-accent">EE brain → ML Senior Brain.</span>
+  </div>
+
+</div>
+</body>
+</html>
